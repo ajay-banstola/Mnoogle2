@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Jobs, Category
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -18,6 +19,11 @@ def BootstrapFilterView(request):
 	
 	if is_valid_queryparam(category) and category !='Choose...':
 		qs = qs.filter(category__name =category)
+		
+	paginator = Paginator(qs,2)
+	page = request.GET.get('page')
+	qs = paginator.get_page(page)
+	
 	context = {
 		'queryset':qs,
 		'categories':categories
